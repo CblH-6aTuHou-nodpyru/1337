@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h> // для использования функции atoi
 
+#pragma mark - Меню
+
 void displayMenu() {
 	printf("Выберите действие:\n");
 	
@@ -17,6 +19,8 @@ void displayMenu() {
 _Bool isMenuChoiseValid(int choise) {
 	return choise >= 1 && choise <= 3;
 }
+
+#pragma mark - Main
 
 int main(int argc, const char * argv[]) {
 	int choise = -1;
