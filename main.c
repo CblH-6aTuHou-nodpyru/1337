@@ -22,7 +22,7 @@ _Bool isMenuChoiseValid(int choise) {
 
 #pragma mark - Main
 
-int main(int argc, const char * argv[]) {
+void beginExecution() {
 	int choise = -1;
 	// до тех пор пока нам не введут адекватное значение, будем делать это:
 	while (!isMenuChoiseValid(choise)) {
@@ -51,5 +51,9 @@ int main(int argc, const char * argv[]) {
 	}
 	
 	printf("Выбрали. Какие мы молодцы! %d\n\n", choise);
+}
+
+int main(int argc, const char * argv[]) {
+	beginExecution();
 	return 0;
 }
