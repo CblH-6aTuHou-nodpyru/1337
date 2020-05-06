@@ -1,6 +1,7 @@
 #include <stdio.h>
+#include <stdlib.h> // для использования функции atoi
 
-int displayMenu() {
+void displayMenu() {
 	printf("Выберите действие:\n");
 	
 	const char *menu[] = {"One", "Two", "Three"};
@@ -9,13 +10,42 @@ int displayMenu() {
 		printf("%d. %s\n", i + 1, menu[i]);
 	}
 	printf("\nВаш выбор: ");
-	
-	int userChoise;
-	scanf("%d", &userChoise);
-	return userChoise;
+}
+
+/// Функция валидирует пользовательский выбор
+/// @param choise выбор пользователя
+_Bool isMenuChoiseValid(int choise) {
+	return choise >= 1 && choise <= 3;
 }
 
 int main(int argc, const char * argv[]) {
-	displayMenu();
+	int choise = -1;
+	// до тех пор пока нам не введут адекватное значение, будем делать это:
+	while (!isMenuChoiseValid(choise)) {
+		// отображаем меню
+		displayMenu();
+		
+		// считываем пользовательский ввод
+		char input[100];
+		scanf("%s", input);
+
+		// валидируем
+		int value = atoi(input); // atoi конвертирует строку в int
+		// если ввели какую-то муть
+		if (value == '\0') {
+			printf("Ты вводишь какую-то муть. Давай ещё раз\n\n");
+		} else {
+			// если ввели не муть, то смотрим чтоб это значение было в диапазоне существующих
+			if (!isMenuChoiseValid(value)) {
+				// не прошли валидацию
+				printf("Такого значения в меню нет. Давай ещё раз\n\n");
+			} else {
+				// прошли валидацию. значит присваиваем корректный choise, что приведёт к выходу из цикла while
+				choise = value;
+			}
+		}
+	}
+	
+	printf("Выбрали. Какие мы молодцы! %d\n\n", choise);
 	return 0;
 }
