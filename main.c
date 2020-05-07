@@ -1,9 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h> // для использования функции atoi
+#include <time.h>
 
 #pragma mark - Меню
 
 void displayMenu() {
+	clock_t timeBefore = clock(); // берём текущее время
+
 	printf("Выберите действие:\n");
 	
 	const char *menu[] = {"One", "Two", "Three"};
@@ -11,6 +14,11 @@ void displayMenu() {
 	for (int i = 0; i < menuItemsCount; i++) {
 		printf("%d. %s\n", i + 1, menu[i]);
 	}
+	
+	clock_t timeAfter = clock(); // берём опять текущее время
+	// вычитаем из новой даты предыдущую - получаем разницу: столько выполнялся этот кусок кода
+	printf("\t\n*** Отрисовка меню заняла: %.10f\n\n", (double)(timeAfter - timeBefore)/CLOCKS_PER_SEC);
+
 	printf("\nВаш выбор: ");
 }
 
