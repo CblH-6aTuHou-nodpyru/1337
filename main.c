@@ -9,7 +9,7 @@ void displayMenu() {
 
 	printf("Выберите действие:\n");
 	
-	const char *menu[] = {"One", "Two", "Three"};
+	const char *menu[] = {"Вставить", "Удалить"};
 	size_t menuItemsCount = sizeof(menu)/sizeof(menu[0]);
 	for (int i = 0; i < menuItemsCount; i++) {
 		printf("%d. %s\n", i + 1, menu[i]);
@@ -26,6 +26,17 @@ void displayMenu() {
 /// @param choise выбор пользователя
 _Bool isMenuChoiseValid(int choise) {
 	return choise >= 1 && choise <= 3;
+}
+
+
+#pragma mark - Menu Actions
+
+void insert() {
+	
+}
+
+void delete() {
+	
 }
 
 #pragma mark - Main
@@ -60,6 +71,12 @@ void offerChoise() {
 	}
 	
 	printf("Выбрали. Какие мы молодцы! %d\n\n", choise);
+	
+	if (choise == 1) {
+		insert();
+	} else if (choise == 2) {
+		delete();
+	}
 }
 
 int main(int argc, const char * argv[]) {
