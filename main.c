@@ -7,42 +7,43 @@
 struct uzel{
 	int data;
 	struct uzel *father;
-	struct uzel *lptr;
-	struct uzel *rptr;
+	struct uzel *left;
+	struct uzel *right;
 };
 typedef struct uzel tree;
 tree *derevo;
 
-tree *root(int value){            //call at the time of initilisation
-	tree *ptr = malloc(sizeof(tree));
-	ptr-> data = value;
-	ptr-> father = 0;
-	ptr-> lptr = 0;
-	ptr-> lptr = 0;
-	return ptr;
+// Инициализатор дерева
+tree *root(int value) {
+	tree *tree = malloc(sizeof(tree));
+	tree-> data = value;
+	tree-> father = 0;
+	tree-> left = 0;
+	tree-> right = 0;
+	return tree;
 }
 void insert(int x, tree *ptr){
 	if (x > ptr->data){
-		if (ptr-> rptr){
-			insert(x,ptr-> rptr);
-		} else{
+		if (ptr-> right){
+			insert(x,ptr-> right);
+		} else {
 			tree *temp = malloc(sizeof(tree));
 			temp-> data = x;
 			temp-> father = ptr;
-			temp-> lptr = 0;
-			temp-> rptr = 0;
-			ptr-> rptr = temp;
+			temp-> left = 0;
+			temp-> right = 0;
+			ptr-> right = temp;
 		}
-	} else{
-		if (ptr-> lptr){
-			insert(x,ptr-> lptr);
+	} else {
+		if (ptr-> left){
+			insert(x,ptr-> left);
 		} else{
 			tree *temp = malloc(sizeof(tree));
 			temp-> data = x;
 			temp-> father = ptr;
-			temp-> lptr = 0;
-			temp-> rptr = 0;
-			ptr-> lptr = temp;
+			temp-> left = 0;
+			temp-> right = 0;
+			ptr-> left = temp;
 		}
 	}
 }
@@ -51,8 +52,8 @@ tree *search(int x, tree *ptr){
 	if(ptr){
 		int y = ptr-> data;
 		if(y == x) return ptr;
-		else if( y < x ) return search(x,ptr->rptr);
-		else return search(x,ptr->lptr);
+		else if( y < x ) return search(x,ptr->right);
+		else return search(x,ptr->left);
 	}else return 0;
 }
 tree *parent(int x, tree *ptr) {
@@ -64,48 +65,48 @@ tree *parent(int x, tree *ptr) {
 tree *lchild(int x, tree *ptr) {
 	tree *temp;
 	if (temp = search(x,ptr)) {
-		return temp-> lptr;
+		return temp-> left;
 	}else return 0;
 }
 tree *rchild(int x, tree *ptr){
 	tree *temp;
 	if (temp = search(x,ptr)) {
-		return temp-> rptr;
+		return temp-> right;
 	}else return 0;
 }
 int delete(int x, tree *ptr) {
 	tree *temp;
 	if (temp = search(x,ptr)) {
 		if (temp == ptr){						   /// ROOT
-			tree *z = ptr-> rptr;
-			ptr-> rptr-> father = 0;
-			while ( z-> lptr) z = z-> lptr;
-			z-> lptr = ptr-> lptr;
-			derevo = ptr-> rptr;
+			tree *z = ptr-> right;
+			ptr-> right-> father = 0;
+			while ( z-> left) z = z-> left;
+			z-> left = ptr-> left;
+			derevo = ptr-> right;
 			free(ptr);
-		}else if (ptr-> lptr && ptr-> rptr){		   /// Both child
+		}else if (ptr-> left && ptr-> right){		   /// Both child
 			tree *z,*temp = ptr-> father;
-			temp-> rptr = ptr-> rptr;
-			ptr-> rptr-> father = temp;
-			z = temp-> rptr;
-			while( z-> lptr) z = z-> lptr;
-			z-> lptr = ptr-> lptr;
+			temp-> right = ptr-> right;
+			ptr-> right-> father = temp;
+			z = temp-> right;
+			while( z-> left) z = z-> left;
+			z-> left = ptr-> left;
 			free(ptr);
-		} else if (ptr-> lptr && !ptr-> rptr){       /// Left child only
+		} else if (ptr-> left && !ptr-> right){       /// Left child only
 			tree *temp = ptr-> father;
-			temp-> lptr = ptr-> lptr;
-			ptr-> lptr-> father = temp;
+			temp-> left = ptr-> left;
+			ptr-> left-> father = temp;
 			free(ptr);
-		} else if (!ptr-> lptr && ptr-> rptr){	   /// Right child only
+		} else if (!ptr-> left && ptr-> right){	   /// Right child only
 			tree *temp = ptr-> father;
-			temp-> rptr = ptr-> rptr;
-			ptr-> rptr-> father = temp;
+			temp-> right = ptr-> right;
+			ptr-> right-> father = temp;
 			free(ptr);
 		} else {                                     /// No child
 			tree *temp = ptr-> father;
 			int k = temp->data;
-			if(k < x) temp-> rptr = 0;
-			else temp-> lptr = 0;
+			if(k < x) temp-> right = 0;
+			else temp-> left = 0;
 			free(ptr);
 		}
 		return(x);
@@ -117,7 +118,7 @@ int delete(int x, tree *ptr) {
 
 int height(tree *ptr,int count) {
 	if(ptr){
-		int x = height(ptr-> lptr,count+1),y = height(ptr-> rptr,count+1);
+		int x = height(ptr-> left,count+1),y = height(ptr-> right,count+1);
 		return ( x > y ? x : y);
 	}
 	return count;
