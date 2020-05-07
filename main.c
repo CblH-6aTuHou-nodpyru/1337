@@ -12,11 +12,9 @@ struct uzel{
 };
 typedef struct uzel tree;
 tree *derevo;
-tree *new(){
-	return (tree *)malloc(sizeof(tree));
-}
+
 tree *root(int value){            //call at the time of initilisation
-	tree *ptr = new();
+	tree *ptr = malloc(sizeof(tree));
 	ptr-> data = value;
 	ptr-> father = 0;
 	ptr-> lptr = 0;
@@ -28,7 +26,7 @@ void insert(int x, tree *ptr){
 		if (ptr-> rptr){
 			insert(x,ptr-> rptr);
 		} else{
-			tree *temp = new();
+			tree *temp = malloc(sizeof(tree));
 			temp-> data = x;
 			temp-> father = ptr;
 			temp-> lptr = 0;
@@ -39,7 +37,7 @@ void insert(int x, tree *ptr){
 		if (ptr-> lptr){
 			insert(x,ptr-> lptr);
 		} else{
-			tree *temp = new();
+			tree *temp = malloc(sizeof(tree));
 			temp-> data = x;
 			temp-> father = ptr;
 			temp-> lptr = 0;
