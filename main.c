@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h> // для использования функции atoi
-#include <time.h>
+#include <time.h> // для использования функции clock
 
 #pragma mark - Меню
 
