@@ -4,31 +4,31 @@
 
 #pragma mark - Бинарное дерево поиска, мама дорогая
 
-struct tree{
+struct uzel{
 	int data;
-	struct tree *father;
-	struct tree *lptr;
-	struct tree *rptr;
+	struct uzel *father;
+	struct uzel *lptr;
+	struct uzel *rptr;
 };
-typedef struct tree node;
-node *derevo;
-node *new(){
-	return (node *)malloc(sizeof(node));
+typedef struct uzel tree;
+tree *derevo;
+tree *new(){
+	return (tree *)malloc(sizeof(tree));
 }
-node *root(int value){            //call at the time of initilisation
-	node *ptr = new();
+tree *root(int value){            //call at the time of initilisation
+	tree *ptr = new();
 	ptr-> data = value;
 	ptr-> father = 0;
 	ptr-> lptr = 0;
 	ptr-> lptr = 0;
 	return ptr;
 }
-void insert(int x, node *ptr){
+void insert(int x, tree *ptr){
 	if (x > ptr->data){
 		if (ptr-> rptr){
 			insert(x,ptr-> rptr);
 		} else{
-			node *temp = new();
+			tree *temp = new();
 			temp-> data = x;
 			temp-> father = ptr;
 			temp-> lptr = 0;
@@ -39,7 +39,7 @@ void insert(int x, node *ptr){
 		if (ptr-> lptr){
 			insert(x,ptr-> lptr);
 		} else{
-			node *temp = new();
+			tree *temp = new();
 			temp-> data = x;
 			temp-> father = ptr;
 			temp-> lptr = 0;
@@ -49,7 +49,7 @@ void insert(int x, node *ptr){
 	}
 }
 
-node *search(int x, node *ptr){
+tree *search(int x, tree *ptr){
 	if(ptr){
 		int y = ptr-> data;
 		if(y == x) return ptr;
@@ -57,36 +57,36 @@ node *search(int x, node *ptr){
 		else return search(x,ptr->lptr);
 	}else return 0;
 }
-node *parent(int x, node *ptr) {
-	node *temp;
+tree *parent(int x, tree *ptr) {
+	tree *temp;
 	if (temp = search(x,ptr)) {
 		return temp-> father;
 	}else return 0;
 }
-node *lchild(int x, node *ptr) {
-	node *temp;
+tree *lchild(int x, tree *ptr) {
+	tree *temp;
 	if (temp = search(x,ptr)) {
 		return temp-> lptr;
 	}else return 0;
 }
-node *rchild(int x, node *ptr){
-	node *temp;
+tree *rchild(int x, tree *ptr){
+	tree *temp;
 	if (temp = search(x,ptr)) {
 		return temp-> rptr;
 	}else return 0;
 }
-int delete(int x, node *ptr) {
-	node *temp;
+int delete(int x, tree *ptr) {
+	tree *temp;
 	if (temp = search(x,ptr)) {
 		if (temp == ptr){						   /// ROOT
-			node *z = ptr-> rptr;
+			tree *z = ptr-> rptr;
 			ptr-> rptr-> father = 0;
 			while ( z-> lptr) z = z-> lptr;
 			z-> lptr = ptr-> lptr;
 			derevo = ptr-> rptr;
 			free(ptr);
 		}else if (ptr-> lptr && ptr-> rptr){		   /// Both child
-			node *z,*temp = ptr-> father;
+			tree *z,*temp = ptr-> father;
 			temp-> rptr = ptr-> rptr;
 			ptr-> rptr-> father = temp;
 			z = temp-> rptr;
@@ -94,17 +94,17 @@ int delete(int x, node *ptr) {
 			z-> lptr = ptr-> lptr;
 			free(ptr);
 		} else if (ptr-> lptr && !ptr-> rptr){       /// Left child only
-			node *temp = ptr-> father;
+			tree *temp = ptr-> father;
 			temp-> lptr = ptr-> lptr;
 			ptr-> lptr-> father = temp;
 			free(ptr);
 		} else if (!ptr-> lptr && ptr-> rptr){	   /// Right child only
-			node *temp = ptr-> father;
+			tree *temp = ptr-> father;
 			temp-> rptr = ptr-> rptr;
 			ptr-> rptr-> father = temp;
 			free(ptr);
 		} else {                                     /// No child
-			node *temp = ptr-> father;
+			tree *temp = ptr-> father;
 			int k = temp->data;
 			if(k < x) temp-> rptr = 0;
 			else temp-> lptr = 0;
@@ -117,7 +117,7 @@ int delete(int x, node *ptr) {
 	}
 }
 
-int height(node *ptr,int count) {
+int height(tree *ptr,int count) {
 	if(ptr){
 		int x = height(ptr-> lptr,count+1),y = height(ptr-> rptr,count+1);
 		return ( x > y ? x : y);
@@ -150,6 +150,9 @@ void displayMenu() {
 _Bool isMenuChoiseValid(int choise) {
 	return choise >= 1 && choise <= 3;
 }
+
+
+#pragma mark - Menu Actions
 
 
 #pragma mark - Main
