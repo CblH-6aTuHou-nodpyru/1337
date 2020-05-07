@@ -187,10 +187,12 @@ void offerChoise() {
 	
 	printf("Выбрали. Какие мы молодцы! %d\n\n", choise);
 	
-	if (choise == 1) {
+	if (choise == 1) { // вставка
 		insert(100, derevo);
-	} else if (choise == 2) {
+	} else if (choise == 2) { // удаление
 		delete(100, derevo);
+	} else if (choise == 3) { // поиск
+		search(100,derevo);
 	}
 }
 
