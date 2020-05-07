@@ -131,7 +131,7 @@ void displayMenu() {
 
 	printf("Выберите действие:\n");
 	
-	const char *menu[] = {"Вставить", "Удалить"};
+	const char *menu[] = {"Вставить", "Удалить", "Поиск"};
 	size_t menuItemsCount = sizeof(menu)/sizeof(menu[0]);
 	for (int i = 0; i < menuItemsCount; i++) {
 		printf("%d. %s\n", i + 1, menu[i]);
