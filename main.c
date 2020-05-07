@@ -22,7 +22,8 @@ _Bool isMenuChoiseValid(int choise) {
 
 #pragma mark - Main
 
-void beginExecution() {
+/// Предложить пользователю выбор
+void offerChoise() {
 	int choise = -1;
 	// до тех пор пока нам не введут адекватное значение, будем делать это:
 	while (!isMenuChoiseValid(choise)) {
@@ -54,6 +55,6 @@ void beginExecution() {
 }
 
 int main(int argc, const char * argv[]) {
-	beginExecution();
+	offerChoise();
 	return 0;
 }
