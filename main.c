@@ -150,9 +150,27 @@ _Bool isMenuChoiseValid(int choise) {
 	return choise >= 1 && choise <= 3;
 }
 
-
-#pragma mark - Menu Actions
-
+// Поиск
+void interactiveSearch() {
+	char input[100];
+	printf("Введите, пожалуйста, значение ключа, которое хотите найти: \n\n");
+	scanf("%s", input);
+	
+	int value = atoi(input);
+	if (value == '\0') {
+		printf("Нужно ввести именно число. Попробуйте снова\n\n");
+		interactiveSearch();
+	} else {
+		tree *searchResult = search(value, derevo);
+		if (searchResult != NULL) {
+			printf ("Введенное значение ключа найдено\n\n" );
+			displayMenu(); // снова показываем меню, чтобы программа не завершалась
+		} else {
+			printf("Такого значения ключа в дереве нет. Попробуйте поискать другое значение\n\n");
+			interactiveSearch();
+		}
+	}
+}
 
 #pragma mark - Main
 
@@ -192,7 +210,7 @@ void offerChoise() {
 	} else if (choise == 2) { // удаление
 		delete(100, derevo);
 	} else if (choise == 3) { // поиск
-		search(100,derevo);
+		interactiveSearch();
 	}
 }
 
