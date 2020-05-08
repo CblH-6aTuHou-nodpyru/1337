@@ -5,121 +5,129 @@
 #pragma mark - Бинарное дерево поиска, мама дорогая
 
 struct uzel{
-	int data;
-	struct uzel *father;
-	struct uzel *left;
-	struct uzel *right;
+	int key; // значение, которое хранится в узле
+	struct uzel *parent; // родительский узел
+	struct uzel *left; // левый потомок
+	struct uzel *right; // правый потомок
 };
-typedef struct uzel tree;
+typedef struct uzel tree; // псевдоним 'tree' для 'struct uzel' чтобы не писать 2 слова каждый раз
 tree *derevo;
 
 // Инициализатор дерева
-tree *root(int value) {
+tree *initialize(int value) {
 	tree *tree = malloc(sizeof(tree));
-	tree-> data = value;
-	tree-> father = 0;
+	tree-> key = value;
+	tree-> parent = 0;
 	tree-> left = 0;
 	tree-> right = 0;
 	return tree;
 }
-void insert(int x, tree *ptr){
-	if (x > ptr->data){
-		if (ptr-> right){
-			insert(x,ptr-> right);
+
+void insert(int x, tree *aTree) {
+	if (x > aTree->key) {
+		if (aTree-> right) {
+			insert(x,aTree-> right);
 		} else {
 			tree *temp = malloc(sizeof(tree));
-			temp-> data = x;
-			temp-> father = ptr;
+			temp-> key = x;
+			temp-> parent = aTree;
 			temp-> left = 0;
 			temp-> right = 0;
-			ptr-> right = temp;
+			aTree-> right = temp;
 		}
 	} else {
-		if (ptr-> left){
-			insert(x,ptr-> left);
-		} else{
+		if (aTree-> left){
+			insert(x,aTree-> left);
+		} else {
 			tree *temp = malloc(sizeof(tree));
-			temp-> data = x;
-			temp-> father = ptr;
+			temp-> key = x;
+			temp-> parent = aTree;
 			temp-> left = 0;
 			temp-> right = 0;
-			ptr-> left = temp;
+			aTree-> left = temp;
 		}
 	}
 }
 
-tree *search(int x, tree *ptr){
-	if(ptr){
-		int y = ptr-> data;
-		if(y == x) return ptr;
-		else if( y < x ) return search(x,ptr->right);
-		else return search(x,ptr->left);
-	}else return 0;
+/// Поиск
+/// @param x искомое значение
+/// @param aTree дерево, в котором ищем
+tree *search(int x, tree *aTree) {
+	if (aTree) {
+		int y = aTree-> key;
+		if (y == x) return aTree;
+		else if (y < x) return search(x, aTree->right);
+		else return search(x,aTree->left);
+	} else {
+		return 0;
+	}
 }
-tree *parent(int x, tree *ptr) {
+tree *parent(int x, tree *pointer) {
 	tree *temp;
-	if (temp = search(x,ptr)) {
-		return temp-> father;
-	}else return 0;
+	if (temp = search(x,pointer)) {
+		return temp-> parent;
+	} else return 0;
 }
-tree *lchild(int x, tree *ptr) {
+tree *lchild(int x, tree *pointer) {
 	tree *temp;
-	if (temp = search(x,ptr)) {
+	if (temp = search(x,pointer)) {
 		return temp-> left;
-	}else return 0;
+	} else return 0;
 }
-tree *rchild(int x, tree *ptr){
+tree *rchild(int x, tree *pointer){
 	tree *temp;
-	if (temp = search(x,ptr)) {
+	if (temp = search(x,pointer)) {
 		return temp-> right;
-	}else return 0;
+	} else return 0;
 }
-int delete(int x, tree *ptr) {
+int delete(int x, tree *aTree) {
 	tree *temp;
-	if (temp = search(x,ptr)) {
-		if (temp == ptr){						   /// ROOT
-			tree *z = ptr-> right;
-			ptr-> right-> father = 0;
+	if (temp = search(x, aTree)) {
+		if (temp == aTree) { // если это корень
+			tree *z = aTree-> right;
+			aTree-> right-> parent = 0;
 			while ( z-> left) z = z-> left;
-			z-> left = ptr-> left;
-			derevo = ptr-> right;
-			free(ptr);
-		}else if (ptr-> left && ptr-> right){		   /// Both child
-			tree *z,*temp = ptr-> father;
-			temp-> right = ptr-> right;
-			ptr-> right-> father = temp;
+			z-> left = aTree-> left;
+			derevo = aTree-> right;
+			free(aTree);
+		} else if (aTree-> left && aTree-> right) { // оба дочерних узла
+			tree *z;
+			tree *temp = aTree-> parent;
+			temp-> right = aTree-> right;
+			aTree-> right-> parent = temp;
 			z = temp-> right;
 			while( z-> left) z = z-> left;
-			z-> left = ptr-> left;
-			free(ptr);
-		} else if (ptr-> left && !ptr-> right){       /// Left child only
-			tree *temp = ptr-> father;
-			temp-> left = ptr-> left;
-			ptr-> left-> father = temp;
-			free(ptr);
-		} else if (!ptr-> left && ptr-> right){	   /// Right child only
-			tree *temp = ptr-> father;
-			temp-> right = ptr-> right;
-			ptr-> right-> father = temp;
-			free(ptr);
-		} else {                                     /// No child
-			tree *temp = ptr-> father;
-			int k = temp->data;
-			if(k < x) temp-> right = 0;
+			z-> left = aTree-> left;
+			free(aTree);
+		} else if (aTree-> left && !aTree-> right) { // имеет только левый узел
+			tree *temp = aTree-> parent;
+			temp-> left = aTree-> left;
+			aTree-> left-> parent = temp;
+			free(aTree);
+		} else if (!aTree-> left && aTree-> right) { // имеет только правый узел
+			tree *temp = aTree-> parent;
+			temp-> right = aTree-> right;
+			aTree-> right-> parent = temp;
+			free(aTree);
+		} else { // без потомков (листва или как там)
+			tree *temp = aTree-> parent;
+			int temporaryKey = temp->key;
+			if (temporaryKey < x) temp-> right = 0;
 			else temp-> left = 0;
-			free(ptr);
+			free(aTree);
 		}
 		return(x);
-	} else{
+	} else {
 		printf("Не найдено\n");
 		return 0;
 	}
 }
 
-int height(tree *ptr,int count) {
-	if(ptr){
-		int x = height(ptr-> left,count+1),y = height(ptr-> right,count+1);
-		return ( x > y ? x : y);
+int height(tree *aTree, int count) {
+	if (aTree) {
+		int x = height(aTree-> left, count + 1);
+		int y = height(aTree-> right, count + 1);
+		return x > y ? x : y;
 	}
 	return count;
 }
@@ -215,7 +223,7 @@ void offerChoise() {
 }
 
 int main(int argc, const char * argv[]) {
-	derevo = root(100);
+	derevo = initialize(100);
 	offerChoise();
 	return 0;
 }
