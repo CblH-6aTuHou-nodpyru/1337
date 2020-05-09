@@ -62,24 +62,7 @@ tree *search(int x, tree *aTree) {
 		return 0;
 	}
 }
-tree *parent(int x, tree *pointer) {
-	tree *temp;
-	if (temp = search(x,pointer)) {
-		return temp-> parent;
-	} else return 0;
-}
-tree *lchild(int x, tree *pointer) {
-	tree *temp;
-	if (temp = search(x,pointer)) {
-		return temp-> left;
-	} else return 0;
-}
-tree *rchild(int x, tree *pointer){
-	tree *temp;
-	if (temp = search(x,pointer)) {
-		return temp-> right;
-	} else return 0;
-}
+
 int delete(int x, tree *aTree) {
 	tree *temp;
 	if (temp = search(x, aTree)) {
