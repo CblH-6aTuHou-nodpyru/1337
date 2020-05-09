@@ -159,6 +159,10 @@ _Bool isMenuChoiseValid(int choise) {
 	return choise >= 1 && choise <= 4;
 }
 
+// объявляем прототип функции, чтобы в методе interactiveSearch была видна функция offerChoise,
+// которая реализована ниже метода interactiveSearch. Этим мы как бы заставляем компилятор поверить нам наслово,
+// что этот метод существует при выполнении программы.
+void offerChoise(void);
 // Поиск
 void interactiveSearch() {
 	char input[100];
@@ -173,7 +177,7 @@ void interactiveSearch() {
 		tree *searchResult = search(value, derevo);
 		if (searchResult != NULL) {
 			printf ("Введенное значение ключа найдено\n\n" );
-			displayMenu(); // снова показываем меню, чтобы программа не завершалась
+			offerChoise(); // снова показываем меню, чтобы программа не завершалась
 		} else {
 			printf("Такого значения ключа в дереве нет. Попробуйте поискать другое значение\n\n");
 			interactiveSearch();
@@ -218,10 +222,12 @@ void offerChoise() {
 		insert(100, derevo);
 	} else if (choise == 2) { // удаление
 		delete(100, derevo);
+		offerChoise(); // снова показываем меню, чтобы программа не завершалась
 	} else if (choise == 3) { // поиск
 		interactiveSearch();
 	} else if (choise == 4) { // распечатать
 		printInPreorder(derevo);
+		offerChoise(); // снова показываем меню, чтобы программа не завершалась
 	}
 }
 
