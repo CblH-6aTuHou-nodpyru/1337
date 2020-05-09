@@ -109,6 +109,13 @@ int height(tree *aTree, int count) {
 	return count;
 }
 
+// Задание:
+// вывод всего содержимого таблицы в прямом порядке следования ключей, превышающих заданное значение ключа;
+// если ключ не указан,  то всей таблицы;
+
+// Сейчас выводится всё дерево.
+// TODO: прокинуть ещё один параметр key, чтобы доделать задание
+// void printInPreorder(tree *aTree, int key)
 void printInPreorder(tree *aTree) {
 	if (aTree) {
 		printf("%d\n", aTree-> key );
@@ -125,8 +132,9 @@ void printInPostorder(tree *aTree) {
 	}
 }
 
+// TODO: Реализовать
 /// Красиво распечатать дерево
-void prettyPrint() {
+void prettyPrint(tree *aTree) {
 	// Гуглим 'print binary search tree'
 	// Реализация на C++
 	// https://stackoverflow.com/a/51730733
@@ -140,7 +148,7 @@ void displayMenu() {
 
 	printf("Выберите действие:\n");
 	
-	const char *menu[] = {"Вставить", "Удалить", "Поиск", "Распечатать"};
+	const char *menu[] = {"Вставить", "Удалить", "Поиск", "Распечатать в прямом порядке", "Распечатать красиво", "Загрузить из файла"};
 	size_t menuItemsCount = sizeof(menu)/sizeof(menu[0]);
 	for (int i = 0; i < menuItemsCount; i++) {
 		printf("%d. %s\n", i + 1, menu[i]);
@@ -156,14 +164,27 @@ void displayMenu() {
 /// Функция валидирует пользовательский выбор
 /// @param choise выбор пользователя
 _Bool isMenuChoiseValid(int choise) {
-	return choise >= 1 && choise <= 4;
+	return choise >= 1 && choise <= 6;
 }
 
 // объявляем прототип функции, чтобы в методе interactiveSearch была видна функция offerChoise,
-// которая реализована ниже метода interactiveSearch. Этим мы как бы заставляем компилятор поверить нам наслово,
-// что этот метод существует при выполнении программы.
+// которая реализована ниже по коду, чем методы interactiveInsert, interactiveDeletion, interactiveSearch.
+// Этим мы как бы заставляем компилятор поверить нам наслово, что этот метод существует при выполнении программы.
 void offerChoise(void);
-// Поиск
+
+// Интерактивная(через взаимодействие с юзером) вставка
+void interactiveInsert() {
+	// TODO: сделать вставку не цифры 100, а значения которое ввёл юзер
+	insert(100, derevo);
+}
+
+// Интерактивное удаление
+void interactiveDeletion() {
+	// TODO: сделать удаление не цифры 100, а значения которое ввёл юзер
+	delete(100, derevo);
+}
+	
+// Интерактивный поиск
 void interactiveSearch() {
 	char input[100];
 	printf("Введите, пожалуйста, значение ключа, которое хотите найти: \n\n");
@@ -183,6 +204,34 @@ void interactiveSearch() {
 			interactiveSearch();
 		}
 	}
+}
+
+// TODO:
+// Задание:
+// поиск элемента, соответствующего значению ключа,
+// совпадающего с заданным по первым N символам (выводятся все элементы, удовлетворяющие условию).
+void interactiveSearchСочныйМощный() {
+	// не очень понял чё значит совпадающий с заданным
+	// типа если есть дерево со значениями 100, 10, 90, 85. Юзер вводит 10, а программа должна выдать 100, 10 ?
+	// потому что они содержатся в этих цифрах. Или как?
+	
+	// Если именно так, как я понял, то можно отконвертить ключ в строку и проверить, содержится ли строка в строке
+	// Или как-то математически попробовать
+	
+	// Если не так, как я понял, то обсудим
+}
+
+// TODO: Реализовать
+// Задание
+// Для целей отладки реализовать загрузку таблицы из файла в формате
+// Ключ1
+// Информация1
+// Ключ2
+// …
+void interactiveLoadFromFile() {
+	// предложить юзеру указать имя файла (файл предварительно лежит на диске с инфой в нужном формате)
+	// легко гуглится, например 'c read from file'
+	// ну и каждому прочтённому узлу делать insert, полагаю
 }
 
 #pragma mark - Main
@@ -219,15 +268,22 @@ void offerChoise() {
 	printf("Выбрали. Какие мы молодцы! %d\n\n", choise);
 	
 	if (choise == 1) { // вставка
-		insert(100, derevo);
-	} else if (choise == 2) { // удаление
-		delete(100, derevo);
+		interactiveInsert();
 		offerChoise(); // снова показываем меню, чтобы программа не завершалась
+	} else if (choise == 2) { // удаление
+		interactiveDeletion();
+		offerChoise();
 	} else if (choise == 3) { // поиск
 		interactiveSearch();
-	} else if (choise == 4) { // распечатать
+	} else if (choise == 4) { // распечатать в прямом порядке
 		printInPreorder(derevo);
-		offerChoise(); // снова показываем меню, чтобы программа не завершалась
+		offerChoise();
+	} else if (choise == 5) { // распечатать красиво
+		prettyPrint(derevo);
+		offerChoise();
+	} else if (choise == 6) { // загрузить из файла
+		interactiveLoadFromFile();
+		offerChoise();
 	}
 }
 
@@ -239,3 +295,20 @@ int main(int argc, const char * argv[]) {
 	offerChoise();
 	return 0;
 }
+
+// TODO:
+// Задание
+// Оценить сложность реализованных алгоритмов.
+// Ответ здесь: https://www.geeksforgeeks.org/complexity-different-operations-binary-tree-binary-search-tree-avl-tree/
+/**
+ Searching: For searching element 1, we have to traverse all elements (in order 3, 2, 1). Therefore, searching in binary search tree has worst case complexity of O(n). In general, time complexity is O(h) where h is height of BST.
+ Insertion: For inserting element 0, it must be inserted as left child of 1. Therefore, we need to traverse all elements (in order 3, 2, 1) to insert 0 which has worst case complexity of O(n). In general, time complexity is O(h).
+ Deletion: For deletion of element 1, we have to traverse all elements to find 1 (in order 3, 2, 1). Therefore, deletion in binary tree has worst case complexity of O(n). In general, time complexity is O(h).
+ */
+// А ещё здесь, справа:
+// https://en.wikipedia.org/wiki/Binary_search_tree
+// Algorithm		Average		Worst case
+// Space			O(n)		O(n)
+// Search			O(log n)	O(n)
+// Insert			O(log n)	O(n)
+// Delete			O(log n)	O(n)
