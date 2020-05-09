@@ -132,6 +132,30 @@ int height(tree *aTree, int count) {
 	return count;
 }
 
+void printInPreorder(tree *aTree) {
+	if (aTree) {
+		printf("%d\n", aTree-> key );
+		printInPreorder(aTree-> left);
+		printInPreorder(aTree-> right);
+	}
+}
+
+void printInPostorder(tree *aTree) {
+	if (aTree) {
+		printInPostorder(aTree-> left);
+		printInPostorder(aTree-> right);
+		printf("%d\n", aTree-> key);
+	}
+}
+
+/// Красиво распечатать дерево
+void prettyPrint() {
+	// Гуглим 'print binary search tree'
+	// Реализация на C++
+	// https://stackoverflow.com/a/51730733
+	// Можно адаптировать под C
+}
+
 #pragma mark - Меню
 
 void displayMenu() {
@@ -139,7 +163,7 @@ void displayMenu() {
 
 	printf("Выберите действие:\n");
 	
-	const char *menu[] = {"Вставить", "Удалить", "Поиск"};
+	const char *menu[] = {"Вставить", "Удалить", "Поиск", "Распечатать"};
 	size_t menuItemsCount = sizeof(menu)/sizeof(menu[0]);
 	for (int i = 0; i < menuItemsCount; i++) {
 		printf("%d. %s\n", i + 1, menu[i]);
@@ -155,7 +179,7 @@ void displayMenu() {
 /// Функция валидирует пользовательский выбор
 /// @param choise выбор пользователя
 _Bool isMenuChoiseValid(int choise) {
-	return choise >= 1 && choise <= 3;
+	return choise >= 1 && choise <= 4;
 }
 
 // Поиск
@@ -219,11 +243,16 @@ void offerChoise() {
 		delete(100, derevo);
 	} else if (choise == 3) { // поиск
 		interactiveSearch();
+	} else if (choise == 4) { // распечатать
+		printInPreorder(derevo);
 	}
 }
 
 int main(int argc, const char * argv[]) {
 	derevo = initialize(100);
+	insert(90, derevo);
+	insert(50, derevo);
+	insert(60, derevo);
 	offerChoise();
 	return 0;
 }
