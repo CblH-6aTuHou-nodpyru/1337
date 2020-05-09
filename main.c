@@ -26,25 +26,25 @@ tree *initialize(int value) {
 void insert(int x, tree *aTree) {
 	if (x > aTree->key) {
 		if (aTree-> right) {
-			insert(x,aTree-> right);
+			insert(x, aTree-> right);
 		} else {
-			tree *temp = malloc(sizeof(tree));
-			temp-> key = x;
-			temp-> parent = aTree;
-			temp-> left = 0;
-			temp-> right = 0;
-			aTree-> right = temp;
+			tree *newChild = malloc(sizeof(tree));
+			newChild-> key = x;
+			newChild-> parent = aTree;
+			newChild-> left = 0;
+			newChild-> right = 0;
+			aTree-> right = newChild;
 		}
 	} else {
 		if (aTree-> left){
-			insert(x,aTree-> left);
+			insert(x, aTree-> left);
 		} else {
-			tree *temp = malloc(sizeof(tree));
-			temp-> key = x;
-			temp-> parent = aTree;
-			temp-> left = 0;
-			temp-> right = 0;
-			aTree-> left = temp;
+			tree *newChild = malloc(sizeof(tree));
+			newChild-> key = x;
+			newChild-> parent = aTree;
+			newChild-> left = 0;
+			newChild-> right = 0;
+			aTree-> left = newChild;
 		}
 	}
 }
