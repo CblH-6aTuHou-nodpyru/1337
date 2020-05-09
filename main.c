@@ -23,7 +23,29 @@ tree *initialize(int value) {
 	return tree;
 }
 
+/// Поиск
+/// @param x искомое значение
+/// @param aTree дерево, в котором ищем
+tree *search(int x, tree *aTree) {
+	if (aTree) {
+		int y = aTree-> key;
+		if (y == x) return aTree;
+		else if (y < x) return search(x, aTree->right);
+		else return search(x,aTree->left);
+	} else {
+		return 0;
+	}
+}
+
 void insert(int x, tree *aTree) {
+	// Из задания: если информация с заданным ключом уже есть, то выводится сообщение об ошибке
+	// Поэтому ищем значение, если есть, то дасвиданья
+	tree *searchResult = search(x, aTree);
+	if (searchResult) {
+		printf("Это значение уже есть в дереве. ДАСВИДАНЬЯ\n\n");
+		return;
+	}
+	
 	if (x > aTree->key) {
 		if (aTree-> right) {
 			insert(x, aTree-> right);
@@ -46,20 +68,6 @@ void insert(int x, tree *aTree) {
 			newChild-> right = 0;
 			aTree-> left = newChild;
 		}
-	}
-}
-
-/// Поиск
-/// @param x искомое значение
-/// @param aTree дерево, в котором ищем
-tree *search(int x, tree *aTree) {
-	if (aTree) {
-		int y = aTree-> key;
-		if (y == x) return aTree;
-		else if (y < x) return search(x, aTree->right);
-		else return search(x,aTree->left);
-	} else {
-		return 0;
 	}
 }
 
