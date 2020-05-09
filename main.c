@@ -64,40 +64,34 @@ tree *search(int x, tree *aTree) {
 }
 
 int delete(int x, tree *aTree) {
-	tree *temp;
-	if (temp = search(x, aTree)) {
-		if (temp == aTree) { // если это корень
-			tree *z = aTree-> right;
-			aTree-> right-> parent = 0;
-			while ( z-> left) z = z-> left;
-			z-> left = aTree-> left;
-			derevo = aTree-> right;
-			free(aTree);
-		} else if (aTree-> left && aTree-> right) { // оба дочерних узла
-			tree *z;
-			tree *temp = aTree-> parent;
-			temp-> right = aTree-> right;
-			aTree-> right-> parent = temp;
-			z = temp-> right;
-			while( z-> left) z = z-> left;
-			z-> left = aTree-> left;
-			free(aTree);
-		} else if (aTree-> left && !aTree-> right) { // имеет только левый узел
-			tree *temp = aTree-> parent;
-			temp-> left = aTree-> left;
-			aTree-> left-> parent = temp;
-			free(aTree);
-		} else if (!aTree-> left && aTree-> right) { // имеет только правый узел
-			tree *temp = aTree-> parent;
-			temp-> right = aTree-> right;
-			aTree-> right-> parent = temp;
-			free(aTree);
+	tree *searchResult = search(x, aTree);
+	if (searchResult) {
+		if (searchResult == aTree) { // если это корень
+			// надо сделать [!!!!!!!!!]
+		} else if (searchResult-> left && searchResult-> right) { // есть есть оба дочерних узла
+			// надо сделать [!!!!!!!!!]
+		} else if (searchResult-> left && !searchResult-> right) { // имеет только левый узел
+			tree *tempParent = searchResult-> parent; // сохраняем ссылку на родителя
+			tree *parentlessLeft = searchResult-> left; // сохраняем ссылку на потомка, у которого теперь нет родителя
+			parentlessLeft-> parent = tempParent; // присваеваем потомку нового родителя
+			tempParent-> left = parentlessLeft; // присваиваем родителю нового потомка
+			free(searchResult); // удаляем найденное значение
+		} else if (!searchResult-> left && searchResult-> right) { // имеет только правый узел
+			tree *tempParent = searchResult-> parent; // сохраняем ссылку на родителя
+			tree *parentlessRight = searchResult-> right; // сохраняем ссылку на потомка, у которого теперь нет родителя
+			parentlessRight-> parent = tempParent; // присваеваем потомку нового родителя
+			// тут у нас остался родитель, которому нужно указать нового наследника
+			if (parentlessRight->key < tempParent->key) { // если он должен быть слева
+				tempParent-> left = parentlessRight; // присваиваем родителю нового потомка
+			} else {
+				tempParent-> right = parentlessRight; // присваиваем родителю нового потомка
+			}
+			free(searchResult); // удаляем найденное значение
 		} else { // без потомков (листва или как там)
-			tree *temp = aTree-> parent;
-			int temporaryKey = temp->key;
-			if (temporaryKey < x) temp-> right = 0;
-			else temp-> left = 0;
-			free(aTree);
+			tree *parent = aTree-> parent;
+			if (parent->key < x) parent-> right = 0;
+			else parent-> left = 0;
+			free(searchResult);
 		}
 		return(x);
 	} else {
