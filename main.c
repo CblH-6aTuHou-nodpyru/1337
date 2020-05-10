@@ -165,7 +165,7 @@ void interactiveInsert() {
 		printf("Нужно ввести именно число. Попробуйте снова\n\n");
 		interactiveInsert();
 	} else {
-		insert(derevo, value);
+		derevo = insert(derevo, value);
 		printf("Введенное значение ключа вставлено в дерево\n\n");
 		offerChoise(); // снова показываем меню, чтобы программа не завершалась
 	}
@@ -182,7 +182,7 @@ void interactiveDeletion() {
 		printf("Нужно ввести именно число. Попробуйте снова\n\n");
 		interactiveDeletion();
 	} else {
-		delete(derevo, value);
+		derevo = delete(derevo, value);
 		printf("Введенное значение ключа удалено из дерева\n\n");
 		offerChoise(); // снова показываем меню, чтобы программа не завершалась
 	}
