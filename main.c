@@ -75,9 +75,9 @@ int delete(int x, tree *aTree) {
 	tree *searchResult = search(x, aTree);
 	if (searchResult) {
 		if (searchResult == aTree) { // если это корень
-			// надо сделать [!!!!!!!!!]
+			// TODO: обработать этот иф
 		} else if (searchResult-> left && searchResult-> right) { // есть есть оба дочерних узла
-			// надо сделать [!!!!!!!!!]
+			// TODO: обработать этот иф
 		} else if (searchResult-> left && !searchResult-> right) { // имеет только левый узел
 			tree *tempParent = searchResult-> parent; // сохраняем ссылку на родителя
 			tree *parentlessLeft = searchResult-> left; // сохраняем ссылку на потомка, у которого теперь нет родителя
