@@ -4,148 +4,111 @@
 
 #pragma mark - Бинарное дерево поиска, мама дорогая
 
-struct uzel{
+struct tree{
 	int key; // значение, которое хранится в узле
-	struct uzel *parent; // родительский узел
-	struct uzel *left; // левый потомок
-	struct uzel *right; // правый потомок
+	struct tree *left; // левый потомок
+	struct tree *right; // правый потомок
 };
-typedef struct uzel tree; // псевдоним 'tree' для 'struct uzel' чтобы не писать 2 слова каждый раз
+
+typedef struct tree tree; // псевдоним 'tree' для 'struct tree' чтобы не писать 2 слова каждый раз
 tree *derevo;
 
 // Инициализатор дерева
 tree *initialize(int value) {
 	tree *tree = malloc(sizeof(tree));
 	tree-> key = value;
-	tree-> parent = 0;
-	tree-> left = 0;
-	tree-> right = 0;
+	tree-> left = NULL;
+	tree-> right = NULL;
 	return tree;
 }
 
-/// Поиск
-/// @param x искомое значение
-/// @param aTree дерево, в котором ищем
-tree *search(int x, tree *aTree) {
-	if (aTree) {
-		int y = aTree-> key;
-		if (y == x) return aTree;
-		else if (y < x) return search(x, aTree->right);
-		else return search(x,aTree->left);
-	} else {
-		return 0;
-	}
+tree *search(tree *root, int x)
+{
+    if (root == NULL || root->key == x) // if root->key is x then the element is found
+        return root;
+    else if (x > root->key) // x is greater, so we will search the right subtree
+        return search(root->right, x);
+    else //x is smaller than the key, so we will search the left subtree
+        return search(root->left,x);
 }
 
-void insert(int x, tree *aTree) {
-	// Из задания: если информация с заданным ключом уже есть, то выводится сообщение об ошибке
-	// Поэтому ищем значение, если есть, то дасвиданья
-	tree *searchResult = search(x, aTree);
-	if (searchResult) {
-		printf("Это значение уже есть в дереве. ДАСВИДАНЬЯ\n\n");
-		return;
+/// Находит минимум в дереве
+/// @param root дерево
+tree *findMinimum(tree *root)
+{
+	if (root == NULL) {
+        return NULL;
 	}
-	
-	if (x > aTree->key) {
-		if (aTree-> right) {
-			insert(x, aTree-> right);
-		} else {
-			tree *newChild = malloc(sizeof(tree));
-			newChild-> key = x;
-			newChild-> parent = aTree;
-			newChild-> left = 0;
-			newChild-> right = 0;
-			aTree-> right = newChild;
-		}
-	} else {
-		if (aTree-> left){
-			insert(x, aTree-> left);
-		} else {
-			tree *newChild = malloc(sizeof(tree));
-			newChild-> key = x;
-			newChild-> parent = aTree;
-			newChild-> left = 0;
-			newChild-> right = 0;
-			aTree-> left = newChild;
-		}
+	else if (root->left != NULL) { // node with minimum value will have no left child
+        return findMinimum(root->left); // left most element will be minimum
 	}
+    return root;
 }
 
-int delete(int x, tree *aTree) {
-	tree *searchResult = search(x, aTree);
-	if (searchResult) {
-		if (searchResult == aTree) { // если это корень
-			// TODO: обработать этот иф
-		} else if (searchResult-> left && searchResult-> right) { // есть есть оба дочерних узла
-			// TODO: обработать этот иф
-		} else if (searchResult-> left && !searchResult-> right) { // имеет только левый узел
-			tree *tempParent = searchResult-> parent; // сохраняем ссылку на родителя
-			tree *parentlessLeft = searchResult-> left; // сохраняем ссылку на потомка, у которого теперь нет родителя
-			parentlessLeft-> parent = tempParent; // присваеваем потомку нового родителя
-
-			// тут у нас остался родитель, которому нужно указать нового наследника,
-			// смотрим в какую сторону его вставить
-			if (parentlessLeft->key < tempParent->key) { // если он должен быть слева
-				tempParent-> left = parentlessLeft; // присваиваем родителю нового потомка
-			} else {
-				tempParent-> right = parentlessLeft; // присваиваем родителю нового потомка
-			}
-
-			free(searchResult); // удаляем найденное значение
-		} else if (!searchResult-> left && searchResult-> right) { // имеет только правый узел
-			tree *tempParent = searchResult-> parent; // сохраняем ссылку на родителя
-			tree *parentlessRight = searchResult-> right; // сохраняем ссылку на потомка, у которого теперь нет родителя
-			parentlessRight-> parent = tempParent; // присваеваем потомку нового родителя
-			// тут у нас остался родитель, которому нужно указать нового наследника
-			if (parentlessRight->key < tempParent->key) { // если он должен быть слева
-				tempParent-> left = parentlessRight; // присваиваем родителю нового потомка
-			} else {
-				tempParent-> right = parentlessRight; // присваиваем родителю нового потомка
-			}
-			free(searchResult); // удаляем найденное значение
-		} else { // без потомков (листва или как там)
-			tree *parent = aTree-> parent;
-			if (parent->key < x) parent-> right = 0;
-			else parent-> left = 0;
-			free(searchResult);
-		}
-		return(x);
-	} else {
-		printf("Не найдено\n");
-		return 0;
+tree *insert(tree *root, int x)
+{
+	// Ищем куда вставить
+	if (root == NULL) {
+        return initialize(x);
+	} else if (x > root->key) { // x is greater. Should be inserted to right
+        root->right = insert(root->right, x);
+	} else { // x is smaller should be inserted to left
+        root->left = insert(root->left, x);
 	}
+    return root;
 }
 
-int height(tree *aTree, int count) {
-	if (aTree) {
-		int x = height(aTree-> left, count + 1);
-		int y = height(aTree-> right, count + 1);
-		return x > y ? x : y;
-	}
-	return count;
+tree *delete(tree *root, int x)
+{
+	// Ищем узел для удаления
+    if (root == NULL)
+        return NULL;
+    if (x > root->key)
+        root->right = delete(root->right, x);
+    else if (x < root->key)
+        root->left = delete(root->left, x);
+    else {
+		if (root->left == NULL && root->right == NULL) { // // Без поддеревьев
+            free(root);
+            return NULL;
+		} else if (root->left == NULL || root->right == NULL) { // Одно поддерево
+            tree *temp;
+            if (root->left == NULL)
+                temp = root->right;
+            else
+                temp = root->left;
+            free(root);
+            return temp;
+        } else { // Оба поддерева
+            tree *temp = findMinimum(root->right);
+            root->key = temp->key;
+            root->right = delete(root->right, temp->key);
+        }
+    }
+    return root;
+}
+
+void inorder(tree *root)
+{
+    if (root != NULL) // может быть нил, если дерево не проинициализировано
+    {
+        inorder(root->left); // visiting left child
+        printf(" %d ", root->key); // printing key at root
+        inorder(root->right);// visiting right child
+    }
 }
 
 // Задание:
 // вывод всего содержимого таблицы в прямом порядке следования ключей, превышающих заданное значение ключа;
 // если ключ не указан,  то всей таблицы;
 
-// Сейчас выводится всё дерево.
-// TODO: прокинуть ещё один параметр key, чтобы доделать задание
-// void printInPreorder(tree *aTree, int key)
-void printInPreorder(tree *aTree) {
-	if (aTree) {
-		printf("%d\n", aTree-> key );
-		printInPreorder(aTree-> left);
-		printInPreorder(aTree-> right);
-	}
-}
-
-void printInPostorder(tree *aTree) {
-	if (aTree) {
-		printInPostorder(aTree-> left);
-		printInPostorder(aTree-> right);
-		printf("%d\n", aTree-> key);
-	}
+// Сейчас оно выводится не в прямом порядке
+// Сейчас выводится всё дерево
+// TODO:
+// 1) прокинуть ещё один параметр key, чтобы доделать задание
+// 2) переделать на прямой порядок
+void printInInorder(tree *root) {
+	inorder(root);
 }
 
 // TODO: Реализовать
@@ -202,7 +165,7 @@ void interactiveInsert() {
 		printf("Нужно ввести именно число. Попробуйте снова\n\n");
 		interactiveInsert();
 	} else {
-		insert(value,derevo);
+		insert(derevo, value);
 		printf("Введенное значение ключа вставлено в дерево\n\n");
 		offerChoise(); // снова показываем меню, чтобы программа не завершалась
 	}
@@ -219,7 +182,7 @@ void interactiveDeletion() {
 		printf("Нужно ввести именно число. Попробуйте снова\n\n");
 		interactiveDeletion();
 	} else {
-		delete(value,derevo);
+		delete(derevo, value);
 		printf("Введенное значение ключа удалено из дерева\n\n");
 		offerChoise(); // снова показываем меню, чтобы программа не завершалась
 	}
@@ -236,7 +199,7 @@ void interactiveSearch() {
 		printf("Нужно ввести именно число. Попробуйте снова\n\n");
 		interactiveSearch();
 	} else {
-		tree *searchResult = search(value, derevo);
+		tree *searchResult = search(derevo, value);
 		if (searchResult != NULL) {
 			printf ("Введенное значение ключа найдено\n\n" );
 			offerChoise(); // снова показываем меню, чтобы программа не завершалась
@@ -317,7 +280,7 @@ void offerChoise() {
 	} else if (choise == 3) { // поиск
 		interactiveSearch();
 	} else if (choise == 4) { // распечатать в прямом порядке
-		printInPreorder(derevo);
+		printInInorder(derevo);
 		offerChoise();
 	} else if (choise == 5) { // распечатать красиво
 		prettyPrint(derevo);
@@ -329,7 +292,7 @@ void offerChoise() {
 }
 
 int main(int argc, const char * argv[]) {
-	derevo = initialize(100);
+	derevo = initialize(50);
 	offerChoise();
 	return 0;
 }
