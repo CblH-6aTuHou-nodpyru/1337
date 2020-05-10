@@ -47,6 +47,13 @@ tree *findMinimum(tree *root)
 
 tree *insert(tree *root, int x)
 {
+	// Из задания: если информация с заданным ключом уже есть, то выводится сообщение об ошибке
+	// Поэтому ищем значение, если есть, то дасвиданья
+	tree *searchResult = search(root, x);
+	if (searchResult) {
+		printf("Это значение уже есть в дереве. ДАСВИДАНЬЯ\n\n");
+		return root;
+	}
 	// Ищем куда вставить
 	if (root == NULL) {
         return initialize(x);
@@ -55,6 +62,7 @@ tree *insert(tree *root, int x)
 	} else { // x is smaller should be inserted to left
         root->left = insert(root->left, x);
 	}
+	printf("Введенное значение ключа вставлено в дерево\n\n");
     return root;
 }
 
@@ -166,7 +174,6 @@ void interactiveInsert() {
 		interactiveInsert();
 	} else {
 		derevo = insert(derevo, value);
-		printf("Введенное значение ключа вставлено в дерево\n\n");
 		offerChoise(); // снова показываем меню, чтобы программа не завершалась
 	}
 }
