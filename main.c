@@ -82,7 +82,18 @@ int delete(int x, tree *aTree) {
 			tree *tempParent = searchResult-> parent; // сохраняем ссылку на родителя
 			tree *parentlessLeft = searchResult-> left; // сохраняем ссылку на потомка, у которого теперь нет родителя
 			parentlessLeft-> parent = tempParent; // присваеваем потомку нового родителя
-			tempParent-> left = parentlessLeft; // присваиваем родителю нового потомка
+
+			// тут у нас остался родитель, которому нужно указать нового наследника,
+			// смотрим в какую сторону его вставить
+			// TODO:
+			// (не помню, правильная ли это логика, но я тут подразумевая что если значение меньше, то оно слева)
+			// и соответственно если >= то справа. Если неправильно, то подкрути здесь и в следующем ифе
+			if (parentlessLeft->key < tempParent->key) { // если он должен быть слева
+				tempParent-> left = parentlessLeft; // присваиваем родителю нового потомка
+			} else {
+				tempParent-> right = parentlessLeft; // присваиваем родителю нового потомка
+			}
+
 			free(searchResult); // удаляем найденное значение
 		} else if (!searchResult-> left && searchResult-> right) { // имеет только правый узел
 			tree *tempParent = searchResult-> parent; // сохраняем ссылку на родителя
