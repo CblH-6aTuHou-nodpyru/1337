@@ -202,8 +202,19 @@ void interactiveInsert() {
 
 // Интерактивное удаление
 void interactiveDeletion() {
-	// TODO: сделать удаление не цифры 100, а значения которое ввёл юзер
-	delete(100, derevo);
+	char input[100];
+	printf("Введите, пожалуйста, значение ключа, которое хотите удалить: \n\n");
+	scanf("%s", input);
+
+	int value = atoi(input);
+	if (value == '\0') {
+		printf("Нужно ввести именно число. Попробуйте снова\n\n");
+		interactiveDeletion();
+	} else {
+		delete(value,derevo);
+		printf("Введенное значение ключа удалено из дерева\n\n");
+		offerChoise(); // снова показываем меню, чтобы программа не завершалась
+	}
 }
 	
 // Интерактивный поиск
