@@ -97,29 +97,8 @@ tree *delete(tree *root, int x)
     return root;
 }
 
-void inorder(tree *root)
-{
-    if (root != NULL) // может быть нил, если дерево не проинициализировано
-    {
-        inorder(root->left); // visiting left child
-        printf(" %d ", root->key); // printing key at root
-        inorder(root->right);// visiting right child
-    }
-}
-
-// Задание:
-// вывод всего содержимого таблицы в прямом порядке следования ключей, превышающих заданное значение ключа;
-// если ключ не указан,  то всей таблицы;
-
-// Сейчас оно выводится не в прямом порядке
-// Сейчас выводится всё дерево
-// TODO:
-// 1) прокинуть ещё один параметр key, чтобы доделать задание
-// 2) переделать на прямой порядок
-void printInInorder(tree *root) {
-	inorder(root);
-}
-
+/// Печатает пробельчики для лакшери атрисовочки
+/// @param indent количество пр@бельчиков
 void printIndent(int indent) {
 	for (int i = 0; i < indent; i++) {
 		printf(" ");
@@ -245,6 +224,40 @@ void interactiveSearch() {
 	}
 }
 
+/// Печатаем ключи которые превышают X
+/// @param root дерево
+/// @param x ИКС
+void printInPreorder(tree *root, int x) {
+	if (root != NULL) { // может быть нил, если дерево не проинициализировано или это конечная остановочка
+		if (root->key > x) {
+			printf(" %d ", root->key);
+		}
+        printInPreorder(root->left, x);
+        printInPreorder(root->right, x);
+	}
+}
+
+// Задание:
+// вывод всего содержимого таблицы в прямом порядке следования ключей, превышающих заданное значение ключа;
+// если ключ не указан,  то всей таблицы;
+void interactivePrintInPreorder() {
+	char input[100];
+	printf("Ща будем печатать всё в прямом порядке.\nЕсли укажешь цифру, то выведем всё, что больше неё.\nЕсли надо вывести всё, то введи любые буквы\nТВОЙ ВЫБОР: ");
+	// ну типа если юзер ввел ыладываыджвалджвы, то печатаем всё
+	// если ввел цифру, то всё что выше неё
+	// по-хорошему хорошо бы дать вместо букв вводить энтер, но надо погуглить как это сделать
+	scanf("%s", input);
+
+	int value = atoi(input);
+	if (value == '\0') {
+		printInPreorder(derevo, '\0');
+	} else {
+		printInPreorder(derevo, value);
+	}
+	printf("\n");
+	offerChoise(); // снова показываем меню, чтобы программа не завершалась
+}
+
 _Bool stringContainsString(char *a, char *b) {
 	return (strstr(a, b) != NULL);
 }
@@ -291,7 +304,7 @@ void interactiveLoadFromFile() {
 //	char filename[100];
 //	printf("\nУкажите файл, из которого хотите загрузить дерево:\n");
 //	scanf("%s", filename);
-	char filename[] = "/path/to/file.txt";
+	char filename[] = "/Users/n/a.txt";
 
 	int bufferLength = 255;
 	char buffer[bufferLength];
@@ -352,7 +365,7 @@ void offerChoise() {
 	} else if (choise == 3) { // поиск
 		interactiveSearch();
 	} else if (choise == 4) { // распечатать в прямом порядке
-		printInInorder(derevo);
+		interactivePrintInPreorder();
 		offerChoise();
 	} else if (choise == 5) { // распечатать красиво
 		prettyPrint(derevo);
