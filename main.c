@@ -395,7 +395,6 @@ void offerChoise() {
 }
 
 int main(int argc, const char * argv[]) {
-	derevo = initialize(50);
 	offerChoise();
 	return 0;
 }
