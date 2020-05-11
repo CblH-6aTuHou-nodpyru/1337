@@ -56,13 +56,13 @@ tree *insert(tree *root, int x)
 	}
 	// Ищем куда вставить
 	if (root == NULL) {
+		printf("Введенное значение ключа вставлено в дерево\n\n");
         return initialize(x);
 	} else if (x > root->key) { // x is greater. Should be inserted to right
         root->right = insert(root->right, x);
 	} else { // x is smaller should be inserted to left
         root->left = insert(root->left, x);
 	}
-	printf("Введенное значение ключа вставлено в дерево\n\n");
     return root;
 }
 
@@ -232,17 +232,29 @@ void interactiveSearchСочныйМощный() {
 	// Если не так, как я понял, то обсудим
 }
 
-// TODO: Реализовать
 // Задание
-// Для целей отладки реализовать загрузку таблицы из файла в формате
+// Загрузка таблицы из файла в формате
 // Ключ1
 // Информация1
 // Ключ2
 // …
 void interactiveLoadFromFile() {
-	// предложить юзеру указать имя файла (файл предварительно лежит на диске с инфой в нужном формате)
-	// легко гуглится, например 'c read from file'
-	// ну и каждому прочтённому узлу делать insert, полагаю
+	char filename[100];
+	printf("\nУкажите файл, из которого хотите загрузить дерево:\n");
+	scanf("%s", filename);
+//	char filename[] = "/path/to/a.txt";
+
+	int bufferLength = 255;
+	char buffer[bufferLength];
+	FILE *filePointer = fopen(filename, "r");
+
+	while(fgets(buffer, bufferLength, filePointer)) {
+		int x = atoi(buffer);
+		if (x != '\0') {
+			insert(derevo, x);
+		}
+	}
+	fclose(filePointer);
 }
 
 #pragma mark - Main
