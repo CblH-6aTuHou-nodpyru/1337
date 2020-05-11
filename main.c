@@ -120,13 +120,40 @@ void printInInorder(tree *root) {
 	inorder(root);
 }
 
-// TODO: Реализовать
+void printIndent(int indent) {
+	for (int i = 0; i < indent; i++) {
+		printf(" ");
+	}
+}
+
+/// ЛАКШЕРИ ФУНКЦИЯ, ВСЁ В ЗОЛОТЕ
+void luxuryPrint(tree *root, int indent) {
+	if (root == NULL) {
+		return;
+	}
+	if (root->right) {
+		luxuryPrint(root->right, indent + indent);
+	}
+	if (indent > 0) {
+		printIndent(indent);
+	}
+	if (root->right != NULL) {
+		printf(" /\n");
+		printIndent(indent);
+		printf(" ");
+	}
+	printf("%d\n", root->key);
+	if (root->left) {
+		printIndent(indent);
+		printf(" ");
+		printf(" \\\n");
+		luxuryPrint(root->left, indent + indent);
+	}
+}
+
 /// Красиво распечатать дерево
 void prettyPrint(tree *aTree) {
-	// Гуглим 'print binary search tree'
-	// Реализация на C++
-	// https://stackoverflow.com/a/51730733
-	// Можно адаптировать под C
+	luxuryPrint(aTree, 4);
 }
 
 #pragma mark - Меню
