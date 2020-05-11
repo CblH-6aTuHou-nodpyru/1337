@@ -97,6 +97,8 @@ tree *delete(tree *root, int x)
     return root;
 }
 
+#pragma mark - Красиво распечатать
+
 /// Печатает пробельчики для лакшери атрисовочки
 /// @param indent количество пр@бельчиков
 void printIndent(int indent) {
@@ -169,6 +171,8 @@ _Bool isMenuChoiseValid(int choise) {
 // Этим мы как бы заставляем компилятор поверить нам наслово, что этот метод существует при выполнении программы.
 void offerChoise(void);
 
+#pragma mark - Вставка
+
 // Интерактивная(через взаимодействие с юзером) вставка
 void interactiveInsert() {
 	char input[100];
@@ -184,6 +188,8 @@ void interactiveInsert() {
 		offerChoise(); // снова показываем меню, чтобы программа не завершалась
 	}
 }
+
+#pragma mark - Удаление
 
 // Интерактивное удаление
 void interactiveDeletion() {
@@ -201,7 +207,9 @@ void interactiveDeletion() {
 		offerChoise(); // снова показываем меню, чтобы программа не завершалась
 	}
 }
-	
+
+#pragma mark - Поиск
+
 // Интерактивный поиск
 void interactiveSearch() {
 	char input[100];
@@ -223,6 +231,8 @@ void interactiveSearch() {
 		}
 	}
 }
+
+#pragma mark - Печатаем ключи превышающие Х
 
 /// Печатаем ключи которые превышают X
 /// @param root дерево
@@ -257,6 +267,8 @@ void interactivePrintInPreorder() {
 	printf("\n");
 	offerChoise(); // снова показываем меню, чтобы программа не завершалась
 }
+
+#pragma mark - Поиск элемента, соответствующего значению ключа
 
 _Bool stringContainsString(char *a, char *b) {
 	return (strstr(a, b) != NULL);
@@ -300,11 +312,13 @@ void interactiveSearchContainedValues() {
 	}
 }
 
+#pragma mark - Загрузка из файла
+
 void interactiveLoadFromFile() {
 //	char filename[100];
 //	printf("\nУкажите файл, из которого хотите загрузить дерево:\n");
 //	scanf("%s", filename);
-	char filename[] = "/Users/n/a.txt";
+	char filename[] = "/path/to/file.txt";
 
 	int bufferLength = 255;
 	char buffer[bufferLength];
