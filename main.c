@@ -239,10 +239,10 @@ void interactiveSearchСочныйМощный() {
 // Ключ2
 // …
 void interactiveLoadFromFile() {
-	char filename[100];
-	printf("\nУкажите файл, из которого хотите загрузить дерево:\n");
-	scanf("%s", filename);
-//	char filename[] = "/path/to/a.txt";
+//	char filename[100];
+//	printf("\nУкажите файл, из которого хотите загрузить дерево:\n");
+//	scanf("%s", filename);
+	char filename[] = "/path/to/file.txt";
 
 	int bufferLength = 255;
 	char buffer[bufferLength];
