@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h> // для использования функции atoi
 #include <time.h> // для использования функции clock
+#include <string.h> // для использования функции strstr
 
 #pragma mark - Бинарное дерево поиска, мама дорогая
 
@@ -138,7 +139,7 @@ void displayMenu() {
 
 	printf("Выберите действие:\n");
 	
-	const char *menu[] = {"Вставить", "Удалить", "Поиск", "Распечатать в прямом порядке", "Распечатать красиво", "Загрузить из файла"};
+	const char *menu[] = {"Вставить", "Удалить", "Поиск", "Распечатать в прямом порядке", "Распечатать красиво", "Загрузить из файла", "Поиск содержащегося числа"};
 	size_t menuItemsCount = sizeof(menu)/sizeof(menu[0]);
 	for (int i = 0; i < menuItemsCount; i++) {
 		printf("%d. %s\n", i + 1, menu[i]);
@@ -154,7 +155,7 @@ void displayMenu() {
 /// Функция валидирует пользовательский выбор
 /// @param choise выбор пользователя
 _Bool isMenuChoiseValid(int choise) {
-	return choise >= 1 && choise <= 6;
+	return choise >= 1 && choise <= 7;
 }
 
 // объявляем прототип функции, чтобы в методе interactiveSearch была видна функция offerChoise,
@@ -217,27 +218,48 @@ void interactiveSearch() {
 	}
 }
 
-// TODO:
+_Bool stringContainsString(char *a, char *b) {
+	return (strstr(a, b) != NULL);
+}
+
 // Задание:
 // поиск элемента, соответствующего значению ключа,
 // совпадающего с заданным по первым N символам (выводятся все элементы, удовлетворяющие условию).
-void interactiveSearchСочныйМощный() {
-	// не очень понял чё значит совпадающий с заданным
-	// типа если есть дерево со значениями 100, 10, 90, 85. Юзер вводит 10, а программа должна выдать 100, 10 ?
-	// потому что они содержатся в этих цифрах. Или как?
-	
-	// Если именно так, как я понял, то можно отконвертить ключ в строку и проверить, содержится ли строка в строке
-	// Или как-то математически попробовать
-	
-	// Если не так, как я понял, то обсудим
+void printContainedValues(tree *root, int x) {
+    if (root != NULL) // может быть нил, если дерево не проинициализировано
+    {
+		// Перевод числа в строку (http://kulibaba.net/programming/cpp/int-to-char)
+		// Конвертируем x и ключ в строку
+		// И проверяем, содержится ли икс в ключе. И так по кругу по всем ключам
+		char xAsString[20];
+		sprintf(xAsString, "%d", x);
+
+		char keyAsString[20];
+		sprintf(keyAsString, "%d", root->key);
+
+		if (stringContainsString(keyAsString, xAsString)) {
+			printf("%d\n", root->key);
+		}
+
+		printContainedValues(root->left, x);
+		printContainedValues(root->right, x);
+    }
 }
 
-// Задание
-// Загрузка таблицы из файла в формате
-// Ключ1
-// Информация1
-// Ключ2
-// …
+void interactiveSearchContainedValues() {
+	printf("\nКакое число хотите найти?\nВаш выбор: ");
+	char input[100];
+	scanf("%s", input);
+
+	int value = atoi(input);
+	if (value == '\0') {
+		printf("Нужно ввести именно число. Попробуйте снова\n\n");
+		interactiveSearchContainedValues();
+	} else {
+		printContainedValues(derevo, value);
+	}
+}
+
 void interactiveLoadFromFile() {
 //	char filename[100];
 //	printf("\nУкажите файл, из которого хотите загрузить дерево:\n");
@@ -248,6 +270,10 @@ void interactiveLoadFromFile() {
 	char buffer[bufferLength];
 	FILE *filePointer = fopen(filename, "r");
 
+	if (filePointer == NULL) {
+		printf("Неверный файл.");
+		return;
+	}
 	while(fgets(buffer, bufferLength, filePointer)) {
 		int x = atoi(buffer);
 		if (x != '\0') {
@@ -306,6 +332,10 @@ void offerChoise() {
 		offerChoise();
 	} else if (choise == 6) { // загрузить из файла
 		interactiveLoadFromFile();
+		offerChoise();
+	} else if (choise == 7) { // поиск содержащегося числа
+		interactiveSearchContainedValues();
+		printf("\n");
 		offerChoise();
 	}
 }
